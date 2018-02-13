@@ -53,10 +53,8 @@
 
                     array_push( $rowdata,$rowdataObject );
                 }
-
                 $GLOBALS['db']->commit();
                 return json_encode( $rowdata );
-
             }catch(PDOException $e){
                 $GLOBALS['db']->rollback();
                 die($e->getMessage());
@@ -64,25 +62,31 @@
         }
 
         public function getAllWritersinfo(){
-            $query = $GLOBALS['db']->prepare("SELECT * FROM $this->tablename");
-            $query->execute();
-            
-            $rowdata = array();
-            while($row =  $query->fetch(PDO::FETCH_ASSOC)  ) {
-                $rowdataObject = new ResultObject;
-                $rowdataObject->name = $row['name'];
-                $rowdataObject->email = $row['email'];
-                $rowdataObject->pen_name = $row['pen_name'];
-                $rowdataObject->experience = $row['experience'];
-                $rowdataObject->blog = $row['blog'];
-                $rowdataObject->area_of_expertise = $row['area_of_expertise'];
-                $rowdataObject->writing_style = $row['writing_style'];
-                $rowdataObject->sample_of_work = $row['sample_of_work'];
-                $rowdataObject->file = $row['file'];
-                array_push($rowdata,$rowdataObject);
+            try{
+                $GLOBALS['db']->beginTransaction();
+                $query = $GLOBALS['db']->prepare("SELECT * FROM $this->tablename");
+                $query->execute();
+                $rowdata = array();
+                while($row =  $query->fetch(PDO::FETCH_ASSOC)  ) {
+                    $rowdataObject = new ResultObject;
+                    $rowdataObject->name = $row['name'];
+                    $rowdataObject->email = $row['email'];
+                    $rowdataObject->pen_name = $row['pen_name'];
+                    $rowdataObject->experience = $row['experience'];
+                    $rowdataObject->blog = $row['blog'];
+                    $rowdataObject->area_of_expertise = $row['area_of_expertise'];
+                    $rowdataObject->writing_style = $row['writing_style'];
+                    $rowdataObject->sample_of_work = $row['sample_of_work'];
+                    $rowdataObject->file = $row['file'];
+                    array_push($rowdata,$rowdataObject);
+                }
+                // var_dump($rowdata);
+                $GLOBALS['db']->commit();
+                return $rowdata;
+            }catch(Exception $e){
+                $GLOBALS['db']->rollback();
+                return "fail";
             }
-            // var_dump($rowdata);
-            return json_encode($rowdata);
         }
 
 

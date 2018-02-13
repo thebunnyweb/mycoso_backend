@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `mycoso`
 --
-CREATE DATABASE IF NOT EXISTS `mycoso` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `mycoso`;
+-- CREATE DATABASE IF NOT EXISTS `mycoso` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+-- USE `mycoso`;
 
 -- --------------------------------------------------------
 

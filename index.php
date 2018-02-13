@@ -10,8 +10,19 @@
 
     if(isset($search)){
         if($search == ""){
-             $getwriters = $writerHelper->getAllWritersinfo();
-            echo $getwriters;
+            $getwriters = $writerHelper->getAllWritersinfo();
+            if($getwriters !== "fail"){
+                $data = array(
+                    "message" => "pass",
+                    "writersdata" => $getwriters
+                );
+                echo json_encode($data);
+            }else{
+                $data = array(
+                    "message" => "fail",
+                    "writerdata" => []
+                );
+            }
         }else{
             $getwritersbysearch = $writerHelper->searchbywriters($search);
             echo $getwritersbysearch;
@@ -21,41 +32,67 @@
 
     if(isset($writeradd)){
         if($writeradd === "new"){
-            
-            $writerData = array(
-                'name' => strip_tags($_POST['name']),
-                'email' =>  strip_tags($_POST['email']),
-                'pen_name' =>  strip_tags($_POST['pen_name']),
-                'experience' =>  strip_tags($_POST['experience']),
-                'blog' =>  strip_tags($_POST['blog']),
-                'area_of_expertise' =>  strip_tags($_POST['area_of_expertise']),
-                'writing_style' =>  strip_tags($_POST['writing_style']),
-                'sample_of_work' =>  strip_tags($_POST['sample_of_work']),
-                'file' =>  strip_tags($_POST['file']),
-            ); 
-            echo $writerHelper->insertWriterInfo($writerData);
-            
-            exit;
+        
+            $allowedFields = array(
+                'name',
+                'email',
+                'pen_name',
+                'experience',
+                'blog',
+                'area_of_expertise',
+                'writing_style',
+                'sample_of_work',
+                'file',
+            );
 
+            $requiredFields = array(
+                'name' => 'Name is required',
+                'email' => 'Email is required',
+                'experience' => 'Experience is required',
+                'email' => 'Email is required',
+                'sample_of_work' => 'Sample of work is required',
+                'file' => 'File is required'
+            );
+
+            $errors = array();
+            $writerdata = array();
+
+            foreach( $requiredFields as $fieldname => $errmsg){
+                if(empty($_POST[$fieldname])){
+                    $errors[] = $errmsg;
+                }
+            }
+
+            foreach($_POST as $key => $value){
+                if(in_array($key, $allowedFields)){
+                    if($key !== 'area_of_expertise'){
+                        ${$key} = strip_tags(trim($value));
+                    }else{
+                        ${$key} = $value;
+                    }
+                    $writerdata[$key] = $value;
+                }
+            }
+
+            
+             if(!empty($area_of_expertise)){
+                $area_of_expertise = implode(",", $area_of_expertise);  
+                $writerdata['area_of_expertise'] = $area_of_expertise;
+            }else{
+                $errors[] = "Area of expertise should atleast be one";
+            }
+
+            if(count($errors) > 0){
+                $data = array(
+                    'message' => 'fail',
+                    'errors' => $errors
+                );
+                echo  json_encode($data);
+                exit();
+            }else{
+                echo $writerHelper->insertWriterInfo($writerdata);
+            }
+            exit();
         }
     }
-    
-
-    // $insertStatus = $writerHelper->insertWriterInfo(
-    //     "payal",
-    //     "payal@icloud.com",
-    //     "bunny2",
-    //     "7 years",
-    //     "www.thebunnyweb.com",
-    //     "technology, training",
-    //     "anger",
-    //     "tata",
-    //     "lorem epsum"
-    // );
-
-    // if($insertStatus === "complete"){
-    //     echo "Enrty Added";
-    // }else{
-    //     echo "Error";
-    // }
 ?>

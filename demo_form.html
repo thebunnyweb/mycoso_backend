@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        input{
+        input {
             display: block;
-            margin:20px 0px;
+            margin: 20px 0px;
         }
     </style>
 </head>
+
 <body>
 
-    <form action="index.php/?writeradd=new" method="POST" enctype="multipart/form-data"> 
+    <form action="index.php/?writeradd=new" method="POST" enctype="multipart/form-data">
         <input type="text" placeholder="name" name="name">
-        <input type="text" placeholder="email" name="email" >
+        <input type="text" placeholder="email" name="email">
         <input type="text" placeholder="pen name" name="pen_name">
         <input type="text" placeholder="experience" name="experience">
         <input type="text" placeholder="blog" name="blog">
-        <input type="text" placeholder="expertise" name="area_of_expertise">
+
         <input type="text" placeholder="writing style" name="writing_style">
+        <label for="area of expertise">
+            <label for="technology">
+                <input type="checkbox" id="technology" value="technology" name=area_of_expertise[]>
+                <span>Technology</span>
+            </label>
+            <label for="technology">
+                <input type="checkbox" id="humour" value="humour" name=area_of_expertise[]>
+                <span>Humour</span>
+            </label>
+            <label for="technology">
+                <input type="checkbox" id="fiction" value="fiction" name=area_of_expertise[]>
+                <span>fiction</span>
+            </label>
+        </label>
         <input type="text" placeholder="work sample" name="sample_of_work">
         <input type="text" placeholder="file" name="file">
         <input type="submit" value="submit">
     </form>
 
 </body>
+
 </html>
