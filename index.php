@@ -1,9 +1,11 @@
 <?php
     require "connection.php";
     require "class.php";
+    require "helpers.php";
 
 
     $writerHelper = new WritersInfo;
+    $helpers = new Helpers;
 
     @$search = $_GET['search'];
     @$writeradd = $_GET['writeradd'];
@@ -32,7 +34,6 @@
 
     if(isset($writeradd)){
         if($writeradd === "new"){
-        
             $allowedFields = array(
                 'name',
                 'email',
@@ -42,30 +43,24 @@
                 'area_of_expertise',
                 'writing_style',
                 'sample_of_work',
-                'file',
             );
-
             $requiredFields = array(
                 'name' => 'Name is required',
                 'email' => 'Email is required',
                 'experience' => 'Experience is required',
                 'email' => 'Email is required',
-                'sample_of_work' => 'Sample of work is required',
-                'file' => 'File is required'
+                'sample_of_work' => 'Sample of work is required'
             );
-
             $errors = array();
             $writerdata = array();
-
             foreach( $requiredFields as $fieldname => $errmsg){
                 if(empty($_POST[$fieldname])){
                     $errors[] = $errmsg;
                 }
             }
-
             foreach($_POST as $key => $value){
                 if(in_array($key, $allowedFields)){
-                    if($key !== 'area_of_expertise'){
+                    if($key !== 'area_of_expertise' && $key !== 'writing_style'){
                         ${$key} = strip_tags(trim($value));
                     }else{
                         ${$key} = $value;
@@ -74,13 +69,22 @@
                 }
             }
 
-            
-             if(!empty($area_of_expertise)){
-                $area_of_expertise = implode(",", $area_of_expertise);  
-                $writerdata['area_of_expertise'] = $area_of_expertise;
+            $fileUploadStatus = $helpers->fileupload($_FILES['file'], 'uploads/');
+            if($fileUploadStatus['message'] === 'uploaded' ){
+                $writerdata['file'] = $fileUploadStatus['filename'];
             }else{
-                $errors[] = "Area of expertise should atleast be one";
+                $errors[] = $fileUploadStatus['message'];
             }
+
+            $area_of_expertise = $helpers->imploader($area_of_expertise);
+            $area_of_expertise = ( $area_of_expertise['message'] === 'success' ) ? $area_of_expertise['data'] : $errors[] = $area_of_expertise['message'];
+            $writerdata['area_of_expertise'] = $area_of_expertise;
+
+
+            $writing_style = $helpers->imploader($writing_style);
+            $writing_style = ( $writing_style['message'] === 'success' ) ? $writing_style['data'] : $errors[] = $writing_style['message'];
+            $writerdata['writing_style'] = $writing_style;
+
 
             if(count($errors) > 0){
                 $data = array(

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        input {
+        input[type="text"] {
             display: block;
             margin: 20px 0px;
         }
@@ -23,23 +23,39 @@
         <input type="text" placeholder="experience" name="experience">
         <input type="text" placeholder="blog" name="blog">
 
-        <input type="text" placeholder="writing style" name="writing_style">
+        <label for="writing_style">
+            <label for="laughter">
+                <input type="checkbox" id="laughter" value="laughter" name=writing_style[]>
+                <span>laughter</span>
+            </label>
+            <label for="terror">
+                <input type="checkbox" id="terror" value="terror" name=writing_style[]>
+                <span>Terror</span>
+            </label>
+            <label for="insane">
+                <input type="checkbox" id="insane" value="insane" name=writing_style[]>
+                <span>Insane</span>
+            </label>
+        </label>
+        <br/>
+        <br/>
+
         <label for="area of expertise">
             <label for="technology">
                 <input type="checkbox" id="technology" value="technology" name=area_of_expertise[]>
                 <span>Technology</span>
             </label>
-            <label for="technology">
+            <label for="humour">
                 <input type="checkbox" id="humour" value="humour" name=area_of_expertise[]>
                 <span>Humour</span>
             </label>
-            <label for="technology">
+            <label for="fiction">
                 <input type="checkbox" id="fiction" value="fiction" name=area_of_expertise[]>
                 <span>fiction</span>
             </label>
         </label>
         <input type="text" placeholder="work sample" name="sample_of_work">
-        <input type="text" placeholder="file" name="file">
+        <input type="file" name="file" accept="image/*">
         <input type="submit" value="submit">
     </form>
 
