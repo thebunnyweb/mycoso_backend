@@ -9,6 +9,7 @@
 
     @$search = $_GET['search'];
     @$writeradd = $_GET['writeradd'];
+    @$contentadd = $_GET['contentadd'];
 
     if(isset($search)){
         if($search == ""){
@@ -99,4 +100,54 @@
             exit();
         }
     }
+
+    if(isset($contentadd)){
+        if($contentadd === 'new'){
+        $contentallowedFields = array(
+            'name',
+            'email',
+            'compname',
+            'desgname',
+            'website',
+            'fbprofile',
+            'fbpage',
+            'twitter',
+            'instagram',
+            'pinterest',
+            'google',
+            'other',
+            'industry',
+            'expertise'
+        );
+
+        $contentrequiredFields = array(
+            'name' => 'Name is required',
+            'email' => 'Email is required',
+            'compname' => 'Company name is required'
+        );
+
+
+        foreach($contentrequiredFields as $fieldname => $errmsg ){
+            if(empty($_POST[$fieldname])){
+                $errors[] = $errmsg;
+            }
+        }
+
+        foreach($_POST as $key => $value){
+            if(in_array($key, $allowedFields)){
+                ${$key} = strip_tags(trim($value));
+                $contentdata[$key] = $value;
+            }
+        }
+
+        if(count($errors) <= 0 ){
+            echo '<pre>', print_r($contentadd, true), '</pre>';    
+        }
+    
+        }
+    }
 ?>
+
+
+
+    
