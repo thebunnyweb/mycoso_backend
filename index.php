@@ -2,10 +2,13 @@
     require "connection.php";
     require "class.php";
     require "helpers.php";
+    require "contenthelper.php";
 
 
     $writerHelper = new WritersInfo;
     $helpers = new Helpers;
+    $contentHelper = new ContentHelper;
+
 
     @$search = $_GET['search'];
     @$writeradd = $_GET['writeradd'];
@@ -125,7 +128,7 @@
             'email' => 'Email is required',
             'compname' => 'Company name is required'
         );
-
+        $errors = array();
 
         foreach($contentrequiredFields as $fieldname => $errmsg ){
             if(empty($_POST[$fieldname])){
@@ -134,16 +137,22 @@
         }
 
         foreach($_POST as $key => $value){
-            if(in_array($key, $allowedFields)){
+            if(in_array($key, $contentallowedFields)){
                 ${$key} = strip_tags(trim($value));
                 $contentdata[$key] = $value;
             }
         }
 
         if(count($errors) <= 0 ){
-            echo '<pre>', print_r($contentadd, true), '</pre>';    
+            echo $contentHelper->insertContentRequirement($contentdata);
+        }else{
+            $data  = array(
+                'message' => 'Cannot Post the data',
+                'error' => $errors
+            );
+            echo json_encode($data);
         }
-    
+        exit();
         }
     }
 ?>
